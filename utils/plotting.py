@@ -28,22 +28,25 @@ def plot_cost_to_go_mountain_car(env, estimator, num_tiles=20):
     plt.show()
 
 
-def plot_value_function(V, title="Value Function"):
+def plot_value_function(Value, title="Value Function", minimum_x=None):
     """
     Plots the value function as a surface plot.
     """
-    min_x = min(k[0] for k in V.keys())
-    max_x = max(k[0] for k in V.keys())
-    min_y = min(k[1] for k in V.keys())
-    max_y = max(k[1] for k in V.keys())
+    if minimum_x:
+        min_x = minimum_x
+    else:
+        min_x = min(k[0] for k in Value.keys())
+    max_x = max(k[0] for k in Value.keys())
+    min_y = min(k[1] for k in Value.keys())
+    max_y = max(k[1] for k in Value.keys())
 
     x_range = np.arange(min_x, max_x + 1)
     y_range = np.arange(min_y, max_y + 1)
     X, Y = np.meshgrid(x_range, y_range)
 
     # Find value for all (x, y) coordinates
-    Z_noace = np.apply_along_axis(lambda _: V[(_[0], _[1], False)], 2, np.dstack([X, Y]))
-    Z_ace = np.apply_along_axis(lambda _: V[(_[0], _[1], True)], 2, np.dstack([X, Y]))
+    Z_noace = np.apply_along_axis(lambda _: Value[(_[0], _[1], False)], 2, np.dstack([X, Y]))
+    Z_ace = np.apply_along_axis(lambda _: Value[(_[0], _[1], True)], 2, np.dstack([X, Y]))
 
     def plot_surface(X, Y, Z, title):
         fig = plt.figure(figsize=(20, 10))
